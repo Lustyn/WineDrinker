@@ -1,0 +1,29 @@
+<manifest>
+    <main-class>com.WineDrinker.main</main-class>
+    <name>Justyn's WineDrinker</name>
+    <tag-line>Literally does nothing</tag-line><!--Max of 50 chars-->
+    <description>Makes you tons of cash by doing absolutely nothing but drinking wine</description><!--Max of 110 chars-->
+    <version>1.0</version>
+    <compatibility>
+        <game>OSRS</game>
+        <game>RS3</game>
+        <!--Can be used if you absolutely need to disable DarkScape (highly discouraged)-->
+        <!--<disable-game>DARK</disable-game>-->
+    </compatibility>
+    <categories>
+        <category>Moneymaking</category>
+    </categories>
+    <!--Required to publish on the bot store-->
+    <internal-id>WineDrinker</internal-id>
+    <!--The rest are optional-->
+    <open-source>false</open-source>
+    <hidden>true</hidden> <!--If you need to hide it from the bot store for maintenance-->
+    <access>private</access>
+    <tags>
+        <tag>Tree</tag>
+        <tag>Vine</tag>
+    </tags>
+    <resources>
+        <resource>path/to/file.png</resource>
+    </resources>
+</manifest>
