@@ -1,5 +1,5 @@
 package com.WineDrinker; /**
- * Created by justy on 10/23/2015.
+ * Created by justy on 10/23/2015. (*cough* and valithor, ;))
  */
 import com.runemate.game.api.client.paint.PaintListener;
 import com.runemate.game.api.hybrid.RuneScape;
@@ -18,7 +18,6 @@ import java.util.ListIterator;
 
 public class main extends LoopingScript implements PaintListener {
 
-    private final static String BOOTH = "Grand Exchange booth";
     public String currentState = "";
     private SpriteItem wine;
     private String name = "WineDrinker";
@@ -43,6 +42,7 @@ public class main extends LoopingScript implements PaintListener {
                 /* Drinking time */
                 if (Bank.isOpen()) {
                     Bank.close();
+                    Execution.delayUntil(this::isBankClosed, 2000, 2200);
                 }
                 currentState = "DRINK";
                 SpriteItemQueryResults wines = Inventory.getItems("Jug of wine");
@@ -100,6 +100,7 @@ public class main extends LoopingScript implements PaintListener {
                 }
             } else if(Bank.isOpen()) {
                 Bank.close();
+                Execution.delayUntil(this::isBankClosed, 2000, 2200);
             }else{
                 currentState = "WAIT";
             }
