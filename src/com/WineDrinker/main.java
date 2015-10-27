@@ -3,20 +3,13 @@ package com.WineDrinker; /**
  */
 import com.runemate.game.api.client.paint.PaintListener;
 import com.runemate.game.api.hybrid.RuneScape;
-import com.runemate.game.api.hybrid.entities.GameObject;
 import com.runemate.game.api.hybrid.entities.Player;
-import com.runemate.game.api.hybrid.entities.details.Locatable;
 import com.runemate.game.api.hybrid.local.hud.interfaces.Bank;
 import com.runemate.game.api.hybrid.local.hud.interfaces.Inventory;
 import com.runemate.game.api.hybrid.local.hud.interfaces.SpriteItem;
-import com.runemate.game.api.hybrid.location.Coordinate;
-import com.runemate.game.api.hybrid.location.navigation.Traversal;
-import com.runemate.game.api.hybrid.location.navigation.web.Web;
-import com.runemate.game.api.hybrid.location.navigation.web.WebPath;
-import com.runemate.game.api.hybrid.location.navigation.web.WebPathBuilder;
 import com.runemate.game.api.hybrid.queries.results.SpriteItemQueryResults;
-import com.runemate.game.api.hybrid.region.GameObjects;
 import com.runemate.game.api.hybrid.region.Players;
+import com.runemate.game.api.hybrid.util.StopWatch;
 import com.runemate.game.api.script.Execution;
 import com.runemate.game.api.script.framework.LoopingScript;
 
@@ -27,18 +20,25 @@ public class main extends LoopingScript implements PaintListener {
 
     private final static String BOOTH = "Grand Exchange booth";
     public String currentState = "";
-    public ListIterator<SpriteItem> iterator = null;
+    private SpriteItem wine;
+    private String name = "WineDrinker";
+    private Integer centerTitle = calcCenter(name, 200);
+    private int drank;
+    private SpriteItem oldWine;
+    private final static StopWatch runtime = new StopWatch();
 
     @Override
     public void onStart(String... args){
         setLoopDelay(250, 700);
         getEventDispatcher().addListener(this);
+        drank = 0;
+        runtime.start();
     }
 
     @Override
     public void onLoop() {
         if (RuneScape.isLoggedIn() && isIdle()) {
-            if (Inventory.contains("Jug of wine") && isIdle()) {
+            if (Inventory.contains("Jug of wine") && isIdle() && !Bank.isOpen()) {
                 //System.out.println("test");
                 /* Drinking time */
                 if (Bank.isOpen()) {
@@ -47,10 +47,23 @@ public class main extends LoopingScript implements PaintListener {
                 currentState = "DRINK";
                 SpriteItemQueryResults wines = Inventory.getItems("Jug of wine");
                 ListIterator<SpriteItem> iterator = wines.listIterator();
-                while (iterator.hasNext()) {
-                    iterator.next().interact("Drink");
-                    Execution.delay(1000);
-                    Execution.delayUntil(this::isIdle, 20000, 22000);
+                wine = iterator.next();
+                while (wine!=null) {
+                    wine.click();
+                    Execution.delay(50,100);
+                    oldWine = wine;
+                    if (iterator.hasNext()) {
+                        wine = iterator.next();
+                        wine.getBounds().getInteractionPoint().hover();
+                    }else{
+                        wine = null;
+                    }
+                    Execution.delayUntil(this::isNotValid, 650, 1500);
+                    Execution.delay(600,800);
+                    if(oldWine != null && !oldWine.isValid()){
+                        drank = drank+1;
+                    }
+                    //drank = drank+1;
                 }
             } else if (RuneScape.isLoggedIn() && Inventory.contains("Jug") && Inventory.containsAnyExcept("Jug of wine")) {
                 //System.out.println("test3");
@@ -85,7 +98,9 @@ public class main extends LoopingScript implements PaintListener {
                     Bank.withdraw("Jug of wine", 28);
                     Execution.delayUntil(Inventory::isFull, 250, 1500);
                 }
-            } else {
+            } else if(Bank.isOpen()) {
+                Bank.close();
+            }else{
                 currentState = "WAIT";
             }
         }
@@ -99,16 +114,14 @@ public class main extends LoopingScript implements PaintListener {
     public void onPaint(Graphics2D g) {
         Color transBlack = new Color(0, 0, 0, 150);
         g.setColor(transBlack);
-        BasicStroke bs3 = new BasicStroke(8, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        g.setStroke(bs3);
-        Integer width = 200;
-        Integer height = 45;
-        g.fill3DRect(0, 0, width, height, true);
+        g.fillRect(0, 0, 200, 75);
+        g.drawRect(0, 0, 200, 75);
         g.setColor(Color.white);
-        String name = "WineDrinker";
-        Integer centerTitle = calcCenter(name, width);
         g.drawString(name, centerTitle, 15);
-        g.drawString("Status: "+getCurrentAction(), 5, 30);
+        g.drawString("Status: " + getCurrentAction(), 5, 30);
+        g.drawString("Wine drank: " + drank, 5, 45);
+        g.drawString("Time run: " + runtime.getRuntimeAsString(), 5, 60);
+        //g.drawString("Time run: " + Math.round(drank/(runtime.getRuntime()/1000)), 5, 75);
     }
 
     private String getCurrentAction(){
@@ -131,6 +144,15 @@ public class main extends LoopingScript implements PaintListener {
             //System.out.println(idle);
             return idle;
         } else {
+            return false;
+        }
+    }
+
+    boolean isNotValid(){
+        if(!oldWine.isValid() && Players.getLocal().getAnimationId() == -1){
+            drank = drank+1;
+            return true;
+        }else {
             return false;
         }
     }
