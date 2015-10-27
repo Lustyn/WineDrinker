@@ -1,7 +1,7 @@
 <manifest>
     <main-class>com.WineDrinker.main</main-class>
     <name>Justyn's WineDrinker</name>
-    <tag-line>Literally does nothing</tag-line><!--Max of 50 chars-->
+    <tag-line>Stop whining for cash, start wining!</tag-line><!--Max of 50 chars-->
     <description>Makes you tons of cash by doing absolutely nothing but drinking wine</description><!--Max of 110 chars-->
     <version>1.0</version>
     <compatibility>
@@ -17,13 +17,12 @@
     <internal-id>WineDrinker</internal-id>
     <!--The rest are optional-->
     <open-source>false</open-source>
-    <hidden>true</hidden> <!--If you need to hide it from the bot store for maintenance-->
+    <hidden>false</hidden> <!--If you need to hide it from the bot store for maintenance-->
     <access>private</access>
     <tags>
-        <tag>Tree</tag>
-        <tag>Vine</tag>
+        <tag>Wine</tag>
+        <tag>Jug</tag>
     </tags>
     <resources>
-        <resource>path/to/file.png</resource>
     </resources>
 </manifest>

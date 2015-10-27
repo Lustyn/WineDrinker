@@ -141,9 +141,8 @@ public class main extends LoopingScript implements PaintListener {
     private boolean isIdle() {
         if (RuneScape.isLoggedIn()) {
             Player avatar = Players.getLocal();
-            Boolean idle = avatar.getAnimationId() == -1 && !avatar.isMoving();
             //System.out.println(idle);
-            return idle;
+            return avatar.getAnimationId() == -1 && !avatar.isMoving();
         } else {
             return false;
         }
