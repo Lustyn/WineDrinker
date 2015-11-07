@@ -48,6 +48,7 @@ public class main extends LoopingScript implements PaintListener {
                 SpriteItemQueryResults wines = Inventory.getItems("Jug of wine");
                 ListIterator<SpriteItem> iterator = wines.listIterator();
                 wine = iterator.next();
+                if (!iterator.hasNext()) { RuneScape.logout();stop(); }
                 while (wine!=null) {
                     wine.click();
                     Execution.delay(50,100);
