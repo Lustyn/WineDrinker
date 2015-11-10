@@ -1,6 +1,6 @@
 <manifest>
     <main-class>com.WineDrinker.main</main-class>
-    <name>Justyn's WineDrinker</name>
+    <name>SkryptWineDrinker</name>
     <tag-line>Stop whining for cash, start wining!</tag-line><!--Max of 50 chars-->
     <description>Makes you tons of cash by doing absolutely nothing but drinking wine</description><!--Max of 110 chars-->
     <version>1.0</version>
@@ -18,7 +18,7 @@
     <!--The rest are optional-->
     <open-source>false</open-source>
     <hidden>false</hidden> <!--If you need to hide it from the bot store for maintenance-->
-    <access>private</access>
+    <access>public</access>
     <tags>
         <tag>Wine</tag>
         <tag>Jug</tag>
